@@ -86,7 +86,8 @@ async def websocket_endpoint(
     active_players[username] = {
         "ws": websocket,
         "x": 100,
-        "y": 100
+        "y": 100,
+        "health": 100
     }
 
     try:
@@ -102,27 +103,52 @@ async def websocket_endpoint(
                 active_players[username]["x"] = data["x"]
                 active_players[username]["y"] = data["y"]
 
-                players = {}
+            elif data["type"] == "attack":
 
-                for name, player in active_players.items():
+                attacker = active_players[username]
 
-                    players[name] = {
-                        "x": player["x"],
-                        "y": player["y"]
-                    }
+                for name, target in active_players.items():
 
-                packet = {
-                    "type": "players",
-                    "players": players
+                    if name == username:
+                        continue
+
+                    dx = attacker["x"] - target["x"]
+                    dy = attacker["y"] - target["y"]
+
+                    distance = (dx * dx + dy * dy) ** 0.5
+
+                    if distance < 50:
+
+                        target["health"] -= 20
+
+                        if target["health"] <= 0:
+
+                            target["x"] = 100
+                            target["y"] = 100
+                            target["health"] = 100
+
+            players = {}
+
+            for name, player in active_players.items():
+
+                players[name] = {
+                    "x": player["x"],
+                    "y": player["y"],
+                    "health": player["health"]
                 }
 
-                for player in active_players.values():
+            packet = {
+                "type": "players",
+                "players": players
+            }
 
-                    await player["ws"].send_text(
-                        json.dumps(packet)
-                    )
+            for player in active_players.values():
 
-            elif data["type"] == "chat":
+                await player["ws"].send_text(
+                    json.dumps(packet)
+                )
+
+            if data["type"] == "chat":
 
                 packet = {
                     "type": "chat",
