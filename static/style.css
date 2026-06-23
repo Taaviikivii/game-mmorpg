@@ -1,0 +1,57 @@
+body{
+    margin:0;
+    background:#0f172a;
+    color:white;
+    font-family:Arial, sans-serif;
+}
+
+#hud{
+    display:grid;
+
+    grid-template-columns:
+        220px
+        1fr
+        320px;
+
+    height:100vh;
+}
+
+#stats{
+    background:#111827;
+    padding:20px;
+    border-right:2px solid #222;
+}
+
+#stats h2{
+    margin-top:0;
+}
+
+#game{
+    background:#1e293b;
+}
+
+#chat{
+    background:#111827;
+    padding:15px;
+    border-left:2px solid #222;
+}
+
+#messages{
+    height:500px;
+    overflow-y:auto;
+    border:1px solid #444;
+    padding:10px;
+}
+
+#chatInput{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+    box-sizing:border-box;
+}
+
+#sendBtn{
+    width:100%;
+    margin-top:10px;
+    padding:10px;
+}
