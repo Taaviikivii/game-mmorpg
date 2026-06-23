@@ -1,11 +1,6 @@
 fastapi
 uvicorn
 sqlalchemy
-<<<<<<< HEAD
 passlib[bcrypt]
 bcrypt
-=======
-passlib
-bcrypt==4.0.1
 websockets
->>>>>>> 9544354 (great)
