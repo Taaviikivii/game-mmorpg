@@ -1,57 +1,49 @@
 body{
-    margin:0;
     background:#0f172a;
     color:white;
-    font-family:Arial, sans-serif;
-}
-
-#hud{
-    display:grid;
-
-    grid-template-columns:
-        220px
-        1fr
-        320px;
-
+    font-family:Arial;
+    display:flex;
+    justify-content:center;
+    align-items:center;
     height:100vh;
 }
 
-#stats{
-    background:#111827;
-    padding:20px;
-    border-right:2px solid #222;
-}
-
-#stats h2{
-    margin-top:0;
-}
-
-#game{
+.login-box{
     background:#1e293b;
+    padding:30px;
+    border-radius:12px;
+}
+
+input{
+    display:block;
+    width:250px;
+    margin:10px 0;
+    padding:10px;
+}
+
+button{
+    padding:10px;
+    margin-right:10px;
+}
+
+#game-container{
+    display:flex;
+    gap:20px;
 }
 
 #chat{
-    background:#111827;
-    padding:15px;
-    border-left:2px solid #222;
+    width:300px;
 }
 
 #messages{
     height:500px;
     overflow-y:auto;
-    border:1px solid #444;
+    border:1px solid white;
     padding:10px;
+    margin-bottom:10px;
 }
 
 #chatInput{
     width:100%;
-    margin-top:10px;
-    padding:10px;
-    box-sizing:border-box;
-}
-
-#sendBtn{
-    width:100%;
-    margin-top:10px;
-    padding:10px;
+    margin-bottom:10px;
 }
