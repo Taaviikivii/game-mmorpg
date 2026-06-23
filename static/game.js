@@ -1,5 +1,5 @@
 const API =
-    "https://game-mmorpg-production.up.railway.app/"
+    "https://game-mmorpg-production.up.railway.app"
 
 
 async function register() {
@@ -113,8 +113,8 @@ function startGame(
 
     const socket =
         new WebSocket(
-            `wss:/game-mmorpg-production.up.railway.app/ws/${username}`
-        );
+    `wss://game-mmorpg-production.up.railway.app/ws/${username}`
+);
 
     socket.onmessage = event => {
 
