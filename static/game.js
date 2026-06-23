@@ -1,3 +1,7 @@
+const API =
+    "https://game-mmorpg-production.up.railway.app/"
+
+
 async function register() {
 
     let username =
@@ -7,7 +11,7 @@ async function register() {
         document.getElementById("password").value;
 
     let response = await fetch(
-        `http://127.0.0.1:8000/register?username=${username}&password=${password}`,
+        `${API}/register?username=${username}&password=${password}`,
         {
             method: "POST"
         }
@@ -28,7 +32,7 @@ async function login() {
         document.getElementById("password").value;
 
     let response = await fetch(
-        `http://127.0.0.1:8000/login?username=${username}&password=${password}`,
+        `${API}/login?username=${username}&password=${password}`,
         {
             method: "POST"
         }
@@ -109,7 +113,7 @@ function startGame(
 
     const socket =
         new WebSocket(
-            `ws://127.0.0.1:8000/ws/${username}`
+            `wss:/game-mmorpg-production.up.railway.app/ws/${username}`
         );
 
     socket.onmessage = event => {
