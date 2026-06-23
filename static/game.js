@@ -1,6 +1,5 @@
 const API =
-    "https://game-mmorpg-production.up.railway.app"
-
+     "https://game-mmorpg-production.up.railway.app"
 
 async function register() {
 
@@ -87,6 +86,24 @@ function startGame(
     y
 ) {
 
+    window.addEventListener(
+    "keydown",
+    e => {
+
+        if (
+            e.code === "Space" &&
+            socket.readyState === WebSocket.OPEN
+        ) {
+
+            socket.send(
+                JSON.stringify({
+                    type: "attack"
+                })
+            );
+        }
+    }
+);
+
     const canvas =
         document.getElementById("game");
 
@@ -104,23 +121,25 @@ function startGame(
 
     const player = {
         x: x,
-        y: y
+        y: y,
+        attackTimer: 0
+
     };
 
     const keys = {};
 
     let worldPlayers = {};
 
-    const socket =
-        new WebSocket(
-    `wss://game-mmorpg-production.up.railway.app/ws/${username}`
+        const socket =
+            new WebSocket(
+              `wss://game-mmorpg-production.up.railway.app/ws/${username}`
 );
 
-    socket.onmessage = event => {
+socket.onmessage = event => {
 
         let data =
             JSON.parse(event.data);
-
+        console.log("WS DATA:", data);
         if (data.type === "chat") {
 
             messagesDiv.innerHTML +=
@@ -144,9 +163,11 @@ function startGame(
         if (
             chatInput.value.trim() === ""
         ) return;
+        
+        player.attackTimer = 15;
 
         socket.send(
-            JSON.stringify({
+            JSON.stringify({    
                 type: "chat",
                 message: chatInput.value
             })
@@ -189,6 +210,10 @@ function startGame(
             moved = true;
         }
 
+        if (player.attackTimer > 0) {
+            player.attackTimer--;
+        }   
+
         if (
             moved &&
             socket.readyState === WebSocket.OPEN
@@ -204,38 +229,72 @@ function startGame(
         }
     }
 
-    function draw() {
+function draw() {
 
-        ctx.clearRect(
-            0,
-            0,
-            canvas.width,
-            canvas.height
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    for (let name in worldPlayers) {
+
+        let p = worldPlayers[name];
+
+        ctx.fillStyle = "blue";
+
+        ctx.fillRect(
+            p.x,
+            p.y,
+            30,
+            30
         );
 
-        for (let name in worldPlayers) {
+        ctx.fillStyle = "red";
 
-            let p =
-                worldPlayers[name];
+        ctx.fillRect(
+            p.x,
+            p.y - 15,
+            30,
+            5
+        );
 
-            ctx.fillStyle = "blue";
+        ctx.fillStyle = "lime";
 
-            ctx.fillRect(
-                p.x,
-                p.y,
-                30,
-                30
-            );
+        ctx.fillRect(
+            p.x,
+            p.y - 15,
+            (p.health / 100) * 30,
+            5
+        );
 
-            ctx.fillStyle = "white";
+        ctx.fillStyle = "white";
 
-            ctx.fillText(
-                name,
-                p.x,
-                p.y - 10
-            );
-        }
+        ctx.fillText(
+            `${name} (${p.health})`,
+            p.x,
+            p.y - 20
+        );
     }
+
+    if (player.attackTimer > 0) {
+
+    ctx.strokeStyle = "red";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        player.x + 15,
+        player.y + 15,
+        50,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.stroke();
+}
+}
 
     function loop() {
 
@@ -243,6 +302,12 @@ function startGame(
         draw();
 
         requestAnimationFrame(loop);
+
+        const player = {
+    x: x,
+    y: y,
+    attackTimer: 0
+};
     }
 
     loop();
